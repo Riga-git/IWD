@@ -6,6 +6,7 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      ontologyIRI="http://www.semanticweb.org/lucarigazzi/ontologies/2020/4/untitled-ontology-6">
+    <Prefix name="" IRI="http://www.semanticweb.org/lucarigazzi/ontologies/2020/4/untitled-ontology-6"/>
     <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
@@ -84,7 +85,7 @@
         <ObjectProperty IRI="#WorksFor"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#Address"/>
+        <ObjectProperty IRI="#hasSchoolFurniture"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#CAP"/>
@@ -127,6 +128,9 @@
     </Declaration>
     <Declaration>
         <DataProperty IRI="#RegistrationDate"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Road"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#SchoolType"/>
@@ -174,16 +178,16 @@
         <Class IRI="#Person"/>
     </SubClassOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="#Constitued"/>
-        <ObjectProperty IRI="#HasFurnitures"/>
-    </SubObjectPropertyOf>
-    <SubObjectPropertyOf>
         <ObjectProperty IRI="#HasClassRoom"/>
         <ObjectProperty IRI="#Constitued"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#TeachIn"/>
         <ObjectProperty IRI="#WorksFor"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasSchoolFurniture"/>
+        <ObjectProperty IRI="#HasFurnitures"/>
     </SubObjectPropertyOf>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#Constitued"/>
@@ -286,10 +290,6 @@
         <Class IRI="#PublicService"/>
     </ObjectPropertyRange>
     <DataPropertyDomain>
-        <DataProperty IRI="#Address"/>
-        <Class IRI="#Address"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
         <DataProperty IRI="#CAP"/>
         <Class IRI="#Address"/>
     </DataPropertyDomain>
@@ -358,6 +358,10 @@
         <Class IRI="#Student"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
+        <DataProperty IRI="#Road"/>
+        <Class IRI="#Address"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
         <DataProperty IRI="#SchoolType"/>
         <Class IRI="#School"/>
     </DataPropertyDomain>
@@ -385,10 +389,6 @@
         <DataProperty IRI="#Volume"/>
         <Class IRI="#Room"/>
     </DataPropertyDomain>
-    <DataPropertyRange>
-        <DataProperty IRI="#Address"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#CAP"/>
         <Datatype abbreviatedIRI="xsd:integer"/>
@@ -443,6 +443,10 @@
     </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#RegistrationDate"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#Road"/>
         <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <DataPropertyRange>
