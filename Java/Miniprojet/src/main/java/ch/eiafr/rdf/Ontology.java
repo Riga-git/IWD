@@ -57,9 +57,33 @@ public class Ontology extends LRI{
 	
 	static void buildOntology(Repository rep) {
 		
-		
+		// RDFS
 		RepositoryConnection conn = rep.getConnection();
+		conn.add(FOAF.PERSON, LRI.WORKSFOR, LRI.PUBLICSERVICE);
+		conn.add(LRI.PROF, RDFS.SUBCLASSOF, FOAF.PERSON);
+		conn.add(LRI.STUDENT, RDFS.SUBCLASSOF, FOAF.PERSON);
+		conn.add(LRI.PROF, LRI.INCHARGEOF, LRI.COURSE);
+		conn.add(LRI.PROF, LRI.LIVES, LRI.ADDRESS);
+		conn.add(LRI.PROF, LRI.TEACHIN, LRI.SCHOOL);
+		conn.add(LRI.STUDENT, LRI.FOLLOWS, LRI.COURSE);
+		conn.add(LRI.STUDENT, LRI.LEARNSIN, LRI.CLASSROOM);
+		conn.add(LRI.STUDENT, LRI.LIVES, LRI.ADDRESS);
+		conn.add(LRI.COURSE, LRI.TAKEPLACEIN, LRI.CLASSROOM);
+		conn.add(LRI.SCHOOL, LRI.HASCOURSE, LRI.COURSE);
+		conn.add(LRI.SCHOOL, LRI.HASCLASSROOM, LRI.HASCLASSROOM);
+		conn.add(LRI.SCHOOL, RDFS.SUBCLASSOF, LRI.BUILDING);
+		conn.add(LRI.SCHOOL, RDFS.SUBCLASSOF, LRI.PUBLICSERVICE);
+		conn.add(LRI.TEACHIN, RDFS.SUBPROPERTYOF, LRI.WORKSFOR);
+		conn.add(LRI.BUILDING, LRI.LOCATED, LRI.ADDRESS);
+		conn.add(LRI.BUILDING, LRI.CONSTITUED, LRI.ROOM);
+		conn.add(LRI.CLASSROOM, LRI.HASSCHOOLFURNITURE, LRI.SCHOOLFURNITURE);
+		conn.add(LRI.CLASSROOM, RDFS.SUBCLASSOF, LRI.ROOM);
+		conn.add(LRI.HASCLASSROOM, RDFS.SUBPROPERTYOF, LRI.CONSTITUED);
+		conn.add(LRI.SCHOOLFURNITURE, RDFS.SUBCLASSOF, LRI.FURNITURE);
+		conn.add(LRI.HASSCHOOLFURNITURE, RDFS.SUBPROPERTYOF, LRI.HASFURNITURES);
+		conn.add(LRI.ROOM, LRI.HASFURNITURES, LRI.FURNITURE);
 		
+		// RDF
 		conn.add(iriMap.get("julien"), LRI.INCHARGEOF, iriMap.get("frenchCourse"));
 		conn.add(iriMap.get("luca"), LRI.INCHARGEOF, iriMap.get("germanCourse"));
 		conn.add(iriMap.get("desire"), LRI.FOLLOWS, iriMap.get("germanCourse"));
@@ -74,8 +98,6 @@ public class Ontology extends LRI{
 		conn.add(iriMap.get("julien"), LRI.LIVES, iriMap.get("julienAddress"));
 		conn.add(iriMap.get("julien"), LRI.LOCATED, iriMap.get("schooAddress"));
 		
-		conn.add(LRI.SCHOOLFURNITURE, RDFS.SUBCLASSOF, LRI.FURNITURE);
-		
 	}
 
 	static Map<String, IRI> createIndividuals(Repository rep) {
@@ -84,7 +106,7 @@ public class Ontology extends LRI{
 		Map<String, IRI> map = new HashMap<String, IRI>();
 		map.put("jerome", createStudent(rep, "Jerome", "Jerôme Garo", "12.03"));
 		map.put("desire", createStudent(rep, "Desire", "Desire Nonis", "12.03"));
-		map.put("luca", createProf(rep, "Luca", "Luca Rigazzi", "Italian"));
+		map.put("luca", createProf(rep, "Luca", "Luca Rigazzi", "German"));
 		map.put("julien", createProf(rep, "Julien", "Julien Tscherig", "French"));
 		map.put("inlinguo", createSchool(rep, "Inlinguo", "Inlinguo", "Language School"));
 		map.put("germanCourse", createCourse(rep, "GermanCourse", "B2", "German"));
@@ -98,7 +120,7 @@ public class Ontology extends LRI{
 		map.put("lucaAddress", createAddress(rep, "LucaAddress", 1422, "Grandson", "Rue des Jardins 22"));							
 		map.put("julienAddress", createAddress(rep, "JulienAddress", 1212, "Lorem", "Ipsum 45"));		
 		map.put("desireAddress", createAddress(rep, "DesireAddress", 3232, "Nunningen", "Lebernweg 5"));		
-		map.put("jeromeAddress", createAddress(rep, "JeromeAddress", 1400, "Yverdon", "Rue des langues 12"));		
+		map.put("jeromeAddress", createAddress(rep, "JeromeAddress", 3206, "Gals", "Bern Strasse 1"));		
 		
 		return map;
 	}
@@ -142,7 +164,6 @@ public class Ontology extends LRI{
 		try {
 			conn.add(iri, RDF.TYPE, LRI.PROF);
 			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, RDFS.SUBCLASSOF, FOAF.PERSON);
 			conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
 			conn.add(iri, LRI.SPECIALIZATION, f.createLiteral(name, XMLSchema.STRING));
 		}	
@@ -167,7 +188,6 @@ public class Ontology extends LRI{
 		try {
 			conn.add(iri, RDF.TYPE, LRI.STUDENT);
 			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, RDFS.SUBCLASSOF, FOAF.PERSON);
 			conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
 			conn.add(iri, LRI.REGISRATIONDATE, f.createLiteral(registrationDate, XMLSchema.STRING));
 		}	
@@ -216,8 +236,6 @@ public class Ontology extends LRI{
 		try {
 			conn.add(iri, RDF.TYPE, LRI.SCHOOL);
 			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, RDFS.SUBCLASSOF, LRI.PUBLICSERVICE);
-			conn.add(iri, RDFS.SUBCLASSOF, LRI.BUILDING);
 			conn.add(iri, LRI.NAME, f.createLiteral(Name, XMLSchema.STRING));
 			conn.add(iri, LRI.SCHOOLTYPE, f.createLiteral(schoolType, XMLSchema.STRING));
 		}	
@@ -266,7 +284,6 @@ public class Ontology extends LRI{
 		try {
 			conn.add(iri, RDF.TYPE, LRI.CLASSROOM);
 			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, RDFS.SUBCLASSOF, LRI.ROOM);
 			conn.add(iri, LRI.CAPACITY, f.createLiteral(number));
 			conn.add(iri, LRI.NUMBER, f.createLiteral(capacity));
 		}	
@@ -339,7 +356,6 @@ public class Ontology extends LRI{
 		try {
 			conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
 			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			//conn.add(iri, RDFS.SUBCLASSOF, LRI.FURNITURE);
 			conn.add(iri, LRI.PRICE, f.createLiteral(price));
 			conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
 			conn.add(iri, LRI.SUBJECT, f.createLiteral(name, XMLSchema.STRING));
@@ -365,7 +381,6 @@ public class Ontology extends LRI{
 		try {
 			conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
 			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, RDFS.SUBCLASSOF, LRI.FURNITURE);
 			conn.add(iri, LRI.PRICE, f.createLiteral(price));
 			conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
 			conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));

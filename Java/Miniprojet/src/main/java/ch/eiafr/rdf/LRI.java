@@ -33,6 +33,8 @@ public class LRI {
 	protected static IRI HASSCHOOLFURNITURE;
 	protected static IRI HASFURNITURES;
 	protected static IRI CONSTITUED;
+	protected static IRI TAKEPLACEIN;
+	protected static IRI HASCOURSE;
 	
 	// Data properties
 	protected static IRI CAP;
@@ -86,6 +88,8 @@ public class LRI {
         HASSCHOOLFURNITURE = vf.createIRI(NAMESPACE, "hasSchoolfurniture");
         HASFURNITURES = vf.createIRI(NAMESPACE, "hasFurnitures");     
         CONSTITUED = vf.createIRI(NAMESPACE, "constitued"); 
+        TAKEPLACEIN = vf.createIRI(NAMESPACE, "takePalceIn"); 
+        HASCOURSE = vf.createIRI(NAMESPACE, "hasCourse"); 
         
 		// Data properties
 		CAP = vf.createIRI(NAMESPACE, "cap");
