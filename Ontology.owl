@@ -153,6 +153,54 @@
     <Declaration>
         <DataProperty IRI="#Volume"/>
     </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Desire"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#DesireAddress"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#FrenchCourse"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#GermanCourse"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Inlinguo"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Jerome"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#JeromeAddress"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Julien"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#JulienAddress"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Luca"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LucaAddress"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Room_132"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Room_256"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SchoolAddress"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Table"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#WhiteBoard"/>
+    </Declaration>
     <SubClassOf>
         <Class IRI="#ClassRoom"/>
         <Class IRI="#Room"/>
@@ -177,6 +225,350 @@
         <Class IRI="#Student"/>
         <Class IRI="#Person"/>
     </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="#Student"/>
+        <NamedIndividual IRI="#Desire"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Address"/>
+        <NamedIndividual IRI="#DesireAddress"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Course"/>
+        <NamedIndividual IRI="#FrenchCourse"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Course"/>
+        <NamedIndividual IRI="#GermanCourse"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#School"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Student"/>
+        <NamedIndividual IRI="#Jerome"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Address"/>
+        <NamedIndividual IRI="#JeromeAddress"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Prof"/>
+        <NamedIndividual IRI="#Julien"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Address"/>
+        <NamedIndividual IRI="#JulienAddress"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Prof"/>
+        <NamedIndividual IRI="#Luca"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Address"/>
+        <NamedIndividual IRI="#LucaAddress"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ClassRoom"/>
+        <NamedIndividual IRI="#Room_132"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ClassRoom"/>
+        <NamedIndividual IRI="#Room_256"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Address"/>
+        <NamedIndividual IRI="#SchoolAddress"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#SchoolFurniture"/>
+        <NamedIndividual IRI="#Table"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#SchoolFurniture"/>
+        <NamedIndividual IRI="#WhiteBoard"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Follows"/>
+        <NamedIndividual IRI="#Desire"/>
+        <NamedIndividual IRI="#GermanCourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Lives"/>
+        <NamedIndividual IRI="#Desire"/>
+        <NamedIndividual IRI="#DesireAddress"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#HasClassRoom"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <NamedIndividual IRI="#Room_132"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#HasClassRoom"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <NamedIndividual IRI="#Room_256"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#HasCourse"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <NamedIndividual IRI="#FrenchCourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#HasCourse"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <NamedIndividual IRI="#GermanCourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Located"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <NamedIndividual IRI="#SchoolAddress"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Follows"/>
+        <NamedIndividual IRI="#Jerome"/>
+        <NamedIndividual IRI="#FrenchCourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Lives"/>
+        <NamedIndividual IRI="#Jerome"/>
+        <NamedIndividual IRI="#JeromeAddress"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#InChargeOf"/>
+        <NamedIndividual IRI="#Julien"/>
+        <NamedIndividual IRI="#FrenchCourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Lives"/>
+        <NamedIndividual IRI="#Julien"/>
+        <NamedIndividual IRI="#JulienAddress"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#InChargeOf"/>
+        <NamedIndividual IRI="#Luca"/>
+        <NamedIndividual IRI="#GermanCourse"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#Lives"/>
+        <NamedIndividual IRI="#Luca"/>
+        <NamedIndividual IRI="#LucaAddress"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasSchoolFurniture"/>
+        <NamedIndividual IRI="#Room_132"/>
+        <NamedIndividual IRI="#Table"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasSchoolFurniture"/>
+        <NamedIndividual IRI="#Room_256"/>
+        <NamedIndividual IRI="#WhiteBoard"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#Desire"/>
+        <Literal>Desire Nonis</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#RegistrationDate"/>
+        <NamedIndividual IRI="#Desire"/>
+        <Literal>26.02</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#CAP"/>
+        <NamedIndividual IRI="#DesireAddress"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3232</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#City"/>
+        <NamedIndividual IRI="#DesireAddress"/>
+        <Literal>Nunningen</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Road"/>
+        <NamedIndividual IRI="#DesireAddress"/>
+        <Literal>Lebernweg 5</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Language"/>
+        <NamedIndividual IRI="#FrenchCourse"/>
+        <Literal>French</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Level"/>
+        <NamedIndividual IRI="#FrenchCourse"/>
+        <Literal>C1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Language"/>
+        <NamedIndividual IRI="#GermanCourse"/>
+        <Literal>German</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Level"/>
+        <NamedIndividual IRI="#GermanCourse"/>
+        <Literal>B2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <Literal>Inlinguo</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#SchoolType"/>
+        <NamedIndividual IRI="#Inlinguo"/>
+        <Literal>Language school</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#Jerome"/>
+        <Literal>Jerôme Garo</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#RegistrationDate"/>
+        <NamedIndividual IRI="#Jerome"/>
+        <Literal>12.03</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#CAP"/>
+        <NamedIndividual IRI="#JeromeAddress"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3206</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#City"/>
+        <NamedIndividual IRI="#JeromeAddress"/>
+        <Literal>Gals</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Road"/>
+        <NamedIndividual IRI="#JeromeAddress"/>
+        <Literal>Bern Strasse 1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#Julien"/>
+        <Literal>Julien Tscherig</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Specialization"/>
+        <NamedIndividual IRI="#Julien"/>
+        <Literal>French</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#CAP"/>
+        <NamedIndividual IRI="#JulienAddress"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1212</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#City"/>
+        <NamedIndividual IRI="#JulienAddress"/>
+        <Literal>Lorem</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Road"/>
+        <NamedIndividual IRI="#JulienAddress"/>
+        <Literal>Ipsum 45</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#Luca"/>
+        <Literal>Luca Rigazzi</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Specialization"/>
+        <NamedIndividual IRI="#Luca"/>
+        <Literal>German</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#CAP"/>
+        <NamedIndividual IRI="#LucaAddress"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1422</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#City"/>
+        <NamedIndividual IRI="#LucaAddress"/>
+        <Literal>Grandson</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Road"/>
+        <NamedIndividual IRI="#LucaAddress"/>
+        <Literal>Rue des Jardins 22</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Capacity"/>
+        <NamedIndividual IRI="#Room_132"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">32</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Number"/>
+        <NamedIndividual IRI="#Room_132"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">132</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Capacity"/>
+        <NamedIndividual IRI="#Room_256"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">12</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Number"/>
+        <NamedIndividual IRI="#Room_256"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">256</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#CAP"/>
+        <NamedIndividual IRI="#SchoolAddress"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1400</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#City"/>
+        <NamedIndividual IRI="#SchoolAddress"/>
+        <Literal>Yverdon</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Road"/>
+        <NamedIndividual IRI="#SchoolAddress"/>
+        <Literal>Rue des langues 12</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Material"/>
+        <NamedIndividual IRI="#Table"/>
+        <Literal>Wood</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#Table"/>
+        <Literal>Table</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Price"/>
+        <NamedIndividual IRI="#Table"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">320</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#StudentAge"/>
+        <NamedIndividual IRI="#Table"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Subject"/>
+        <NamedIndividual IRI="#Table"/>
+        <Literal>Chemistry</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Name"/>
+        <NamedIndividual IRI="#WhiteBoard"/>
+        <Literal>White Board</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Price"/>
+        <NamedIndividual IRI="#WhiteBoard"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Subject"/>
+        <NamedIndividual IRI="#WhiteBoard"/>
+        <Literal>Math Class</Literal>
+    </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#HasClassRoom"/>
         <ObjectProperty IRI="#Constitued"/>
