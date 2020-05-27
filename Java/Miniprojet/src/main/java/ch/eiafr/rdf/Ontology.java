@@ -37,28 +37,37 @@ public class Ontology extends LRI{
 		File dataDir = new File(basepath + "..\\..\\MyRepository");
 		// Create repository
 		Repository rep = new SailRepository(new MemoryStore(dataDir));
-
-		iriMap = createIndividuals(rep);
-		buildOntology(rep);
-		
 		RepositoryConnection conn = rep.getConnection();
-		RepositoryResult<Statement> statements = conn.getStatements(null, null, null, true);
-		
-		Model model = Iterations.addAll(statements, new LinkedHashModel());
-		model.setNamespace("rdf", RDF.NAMESPACE);
-		model.setNamespace("rdfs", RDFS.NAMESPACE);
-		model.setNamespace("xsd", XMLSchema.NAMESPACE);
-		model.setNamespace("foaf", FOAF.NAMESPACE);
-		model.setNamespace("lri", LRI.NAMESPACE);
-		
-		Rio.write(model, System.out, RDFFormat.TURTLE);
+		ValueFactory f = rep.getValueFactory();
+
+		try {
+			iriMap = createIndividuals(conn, f);
+			buildOntology(conn);
+			
+			RepositoryResult<Statement> statements = conn.getStatements(null, null, null, true);
+			
+			Model model = Iterations.addAll(statements, new LinkedHashModel());
+			model.setNamespace("rdf", RDF.NAMESPACE);
+			model.setNamespace("rdfs", RDFS.NAMESPACE);
+			model.setNamespace("xsd", XMLSchema.NAMESPACE);
+			model.setNamespace("foaf", FOAF.NAMESPACE);
+			model.setNamespace("lri", LRI.NAMESPACE);
+			
+			Rio.write(model, System.out, RDFFormat.TURTLE);
+				
+		}
+		catch (RDF4JException e) {
+			System.out.println("Exception : " + e.toString());
+		}  
+		finally {
+			conn.close();
+		}
 
 	}
 	
-	static void buildOntology(Repository rep) {
+	static void buildOntology(RepositoryConnection conn) {
 		
 		// RDFS
-		RepositoryConnection conn = rep.getConnection();
 		conn.add(FOAF.PERSON, LRI.WORKSFOR, LRI.PUBLICSERVICE);
 		conn.add(LRI.PROF, RDFS.SUBCLASSOF, FOAF.PERSON);
 		conn.add(LRI.STUDENT, RDFS.SUBCLASSOF, FOAF.PERSON);
@@ -97,327 +106,193 @@ public class Ontology extends LRI{
 		conn.add(iriMap.get("jerome"), LRI.LIVES, iriMap.get("jeromeAddress"));
 		conn.add(iriMap.get("julien"), LRI.LIVES, iriMap.get("julienAddress"));
 		conn.add(iriMap.get("julien"), LRI.LOCATED, iriMap.get("schooAddress"));
-		
+
 	}
 
-	static Map<String, IRI> createIndividuals(Repository rep) {
+	static Map<String, IRI> createIndividuals(RepositoryConnection conn, ValueFactory f) {
 		// Examples
 		
 		Map<String, IRI> map = new HashMap<String, IRI>();
-		map.put("jerome", createStudent(rep, "Jerome", "Jerôme Garo", "12.03"));
-		map.put("desire", createStudent(rep, "Desire", "Desire Nonis", "12.03"));
-		map.put("luca", createProf(rep, "Luca", "Luca Rigazzi", "German"));
-		map.put("julien", createProf(rep, "Julien", "Julien Tscherig", "French"));
-		map.put("inlinguo", createSchool(rep, "Inlinguo", "Inlinguo", "Language School"));
-		map.put("germanCourse", createCourse(rep, "GermanCourse", "B2", "German"));
-		map.put("frenchCourse", createCourse(rep, "FrenchCourse", "C1", "FrenchS"));
+		map.put("jerome", createStudent(conn, f, "Jerome", "Jerôme Garo", "12.03"));
+		map.put("desire", createStudent(conn, f, "Desire", "Desire Nonis", "12.03"));
+		map.put("luca", createProf(conn, f, "Luca", "Luca Rigazzi", "German"));
+		map.put("julien", createProf(conn, f, "Julien", "Julien Tscherig", "French"));
+		map.put("inlinguo", createSchool(conn, f, "Inlinguo", "Inlinguo", "Language School"));
+		map.put("germanCourse", createCourse(conn, f, "GermanCourse", "B2", "German"));
+		map.put("frenchCourse", createCourse(conn, f, "FrenchCourse", "C1", "FrenchS"));
 		
-		map.put("room_132", createClassRoom(rep, "Room_132", 132, 32));
-		map.put("room_256", createClassRoom(rep, "Room_256", 256, 12));
-		map.put("whiteBoard", createSchoolFurniture(rep, "WhiteBoard", "White Board", 250 , "Math class"));
-		map.put("table", createSchoolFurniture(rep, "Table", "Table", 320, "Chemistry", 20, "Wood"));
-		map.put("schooAddress", createAddress(rep, "SchooAddress", 1400, "Yverdon", "Rue des langues 12"));
-		map.put("lucaAddress", createAddress(rep, "LucaAddress", 1422, "Grandson", "Rue des Jardins 22"));							
-		map.put("julienAddress", createAddress(rep, "JulienAddress", 1212, "Lorem", "Ipsum 45"));		
-		map.put("desireAddress", createAddress(rep, "DesireAddress", 3232, "Nunningen", "Lebernweg 5"));		
-		map.put("jeromeAddress", createAddress(rep, "JeromeAddress", 3206, "Gals", "Bern Strasse 1"));		
+		map.put("room_132", createClassRoom(conn, f, "Room_132", 132, 32));
+		map.put("room_256", createClassRoom(conn, f, "Room_256", 256, 12));
+		map.put("whiteBoard", createSchoolFurniture(conn, f, "WhiteBoard", "White Board", 250 , "Math class"));
+		map.put("table", createSchoolFurniture(conn, f, "Table", "Table", 320, "Chemistry", 20, "Wood"));
+		map.put("schooAddress", createAddress(conn, f, "SchooAddress", 1400, "Yverdon", "Rue des langues 12"));
+		map.put("lucaAddress", createAddress(conn, f, "LucaAddress", 1422, "Grandson", "Rue des Jardins 22"));							
+		map.put("julienAddress", createAddress(conn, f, "JulienAddress", 1212, "Lorem", "Ipsum 45"));		
+		map.put("desireAddress", createAddress(conn, f, "DesireAddress", 3232, "Nunningen", "Lebernweg 5"));		
+		map.put("jeromeAddress", createAddress(conn, f, "JeromeAddress", 3206, "Gals", "Bern Strasse 1"));		
 		
 		return map;
 	}
 
 	// Address
-	static IRI createAddress(Repository rep, String identifier, int cap, String city, String Road) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createAddress(RepositoryConnection conn, ValueFactory f, String identifier, int cap, String city, String Road) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
-
-		try {
-			System.out.println(LRI.ADDRESS);
-			conn.add(iri, RDF.TYPE, LRI.ADDRESS);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.CAP, f.createLiteral(cap));
-			conn.add(iri, LRI.CITY, f.createLiteral(city, XMLSchema.STRING));
-			conn.add(iri, LRI.ROAD, f.createLiteral(Road, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
+		conn.add(iri, RDF.TYPE, LRI.ADDRESS);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.CAP, f.createLiteral(cap));
+		conn.add(iri, LRI.CITY, f.createLiteral(city, XMLSchema.STRING));
+		conn.add(iri, LRI.ROAD, f.createLiteral(Road, XMLSchema.STRING));
 
 		return iri;
 	}
 
 	// Prof
-	static IRI createProf(Repository rep, String identifier, String name, String specialization) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createProf(RepositoryConnection conn, ValueFactory f, String identifier, String name, String specialization) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.PROF);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
+		conn.add(iri, LRI.SPECIALIZATION, f.createLiteral(name, XMLSchema.STRING));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.PROF);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
-			conn.add(iri, LRI.SPECIALIZATION, f.createLiteral(name, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Student
-	static IRI createStudent(Repository rep, String identifier, String name, String registrationDate) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createStudent(RepositoryConnection conn, ValueFactory f, String identifier, String name, String registrationDate) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.STUDENT);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
+		conn.add(iri, LRI.REGISRATIONDATE, f.createLiteral(registrationDate, XMLSchema.STRING));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.STUDENT);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
-			conn.add(iri, LRI.REGISRATIONDATE, f.createLiteral(registrationDate, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Course
-	static IRI createCourse(Repository rep, String identifier, String level, String language) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createCourse(RepositoryConnection conn, ValueFactory f, String identifier, String level, String language) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.COURSE);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.LEVEL, f.createLiteral(level, XMLSchema.STRING));
+		conn.add(iri, LRI.LANGUAGE, f.createLiteral(language, XMLSchema.STRING));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.COURSE);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.LEVEL, f.createLiteral(level, XMLSchema.STRING));
-			conn.add(iri, LRI.LANGUAGE, f.createLiteral(language, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Public school
-	static IRI createSchool(Repository rep, String identifier, String Name, String schoolType) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createSchool(RepositoryConnection conn, ValueFactory f, String identifier, String Name, String schoolType) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.SCHOOL);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.NAME, f.createLiteral(Name, XMLSchema.STRING));
+		conn.add(iri, LRI.SCHOOLTYPE, f.createLiteral(schoolType, XMLSchema.STRING));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.SCHOOL);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.NAME, f.createLiteral(Name, XMLSchema.STRING));
-			conn.add(iri, LRI.SCHOOLTYPE, f.createLiteral(schoolType, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Public service
-	static IRI createPublicService(Repository rep, String identifier, String name, String schoolType) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createPublicService(RepositoryConnection conn, ValueFactory f, String identifier, String name, String schoolType) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.PUBLICSERVICE);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.SERVICETYPE, f.createLiteral(name, XMLSchema.STRING));
+		conn.add(iri, LRI.OPENINGHOURS, f.createLiteral(schoolType, XMLSchema.STRING));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.PUBLICSERVICE);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.SERVICETYPE, f.createLiteral(name, XMLSchema.STRING));
-			conn.add(iri, LRI.OPENINGHOURS, f.createLiteral(schoolType, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Class room
-	static IRI createClassRoom(Repository rep, String identifier, int number, int capacity) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createClassRoom(RepositoryConnection conn, ValueFactory f, String identifier, int number, int capacity) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.CLASSROOM);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.CAPACITY, f.createLiteral(number));
+		conn.add(iri, LRI.NUMBER, f.createLiteral(capacity));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.CLASSROOM);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.CAPACITY, f.createLiteral(number));
-			conn.add(iri, LRI.NUMBER, f.createLiteral(capacity));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Class Building
-	static IRI createBuilding(Repository rep, String identifier, String color, int height) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createBuilding(RepositoryConnection conn, ValueFactory f, String identifier, String color, int height) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
+		
+		conn.add(iri, RDF.TYPE, LRI.BUILDING);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.COLOR, f.createLiteral(color, XMLSchema.STRING));
+		conn.add(iri, LRI.HEIGHT, f.createLiteral(height));
 
-		RepositoryConnection conn = rep.getConnection();
-
-		try {
-			conn.add(iri, RDF.TYPE, LRI.BUILDING);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.COLOR, f.createLiteral(color, XMLSchema.STRING));
-			conn.add(iri, LRI.HEIGHT, f.createLiteral(height));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// Room
-	static IRI createRoom(Repository rep, String identifier, int surface, int volume) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createRoom(RepositoryConnection conn, ValueFactory f, String identifier, int surface, int volume) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.ROOM);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.SURFACE, f.createLiteral(surface));
+		conn.add(iri, LRI.VOLUME, f.createLiteral(volume));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.ROOM);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.SURFACE, f.createLiteral(surface));
-			conn.add(iri, LRI.VOLUME, f.createLiteral(volume));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// School furniture
-	static IRI createSchoolFurniture(Repository rep, String identifier, String name, float price, String subject) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createSchoolFurniture(RepositoryConnection conn, ValueFactory f, String identifier, String name, float price, String subject) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.PRICE, f.createLiteral(price));
+		conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
+		conn.add(iri, LRI.SUBJECT, f.createLiteral(name, XMLSchema.STRING));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.PRICE, f.createLiteral(price));
-			conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
-			conn.add(iri, LRI.SUBJECT, f.createLiteral(name, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
 	// School furniture
-	static IRI createSchoolFurniture(Repository rep, String identifier, String name, float price, String subject, int studentAge, String material) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createSchoolFurniture(RepositoryConnection conn, ValueFactory f, String identifier, String name, float price, String subject, int studentAge, String material) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
-
-		try {
-			conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.PRICE, f.createLiteral(price));
-			conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
-			conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
-			conn.add(iri, LRI.STUDENTAGE, f.createLiteral(studentAge));
-			conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
+		conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.PRICE, f.createLiteral(price));
+		conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
+		conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
+		conn.add(iri, LRI.STUDENTAGE, f.createLiteral(studentAge));
+		conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
+		
 		return iri;
 	}
 
 	// Furniture
-	static IRI createFurniture(Repository rep, String identifier, String material, String name, float price) {
-
-		ValueFactory f = rep.getValueFactory();
+	static IRI createFurniture(RepositoryConnection conn, ValueFactory f, String identifier, String material, String name, float price) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
-		RepositoryConnection conn = rep.getConnection();
+		conn.add(iri, RDF.TYPE, LRI.FURNITURE);
+		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
+		conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
+		conn.add(iri, LRI.PRICE, f.createLiteral(price));
 
-		try {
-			conn.add(iri, RDF.TYPE, LRI.FURNITURE);
-			conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-			conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
-			conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
-			conn.add(iri, LRI.PRICE, f.createLiteral(price));
-		}	
-		catch (RDF4JException e) {
-			System.out.println("Exception : " + e.toString());
-		}  
-		finally {
-			conn.close();
-		}
 		return iri;
 	}
 
