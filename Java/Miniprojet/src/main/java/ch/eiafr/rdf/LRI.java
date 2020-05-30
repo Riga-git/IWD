@@ -5,9 +5,9 @@ import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 public class LRI {
-	
-	protected static String NAMESPACE = "http:/lri.ch/";
-	
+
+	protected static String NAMESPACE = "http://lri.ch/";
+
 	// Classes
 	protected static IRI ADDRESS;
 	protected static IRI PROF;
@@ -20,7 +20,7 @@ public class LRI {
 	protected static IRI SCHOOLFURNITURE;
 	protected static IRI ROOM;
 	protected static IRI FURNITURE;
-	
+
 	// Object properties
 	protected static IRI LOCATED;
 	protected static IRI WORKSFOR;
@@ -35,7 +35,7 @@ public class LRI {
 	protected static IRI CONSTITUED;
 	protected static IRI TAKEPLACEIN;
 	protected static IRI HASCOURSE;
-	
+
 	// Data properties
 	protected static IRI CAP;
 	protected static IRI CITY;
@@ -59,61 +59,60 @@ public class LRI {
 	protected static IRI MATERIAL;
 	protected static IRI PRICE;
 
-	
 	public static void createIri() {
-		
+
 		ValueFactory vf = SimpleValueFactory.getInstance();
-		
+
 		// Classes
 		ADDRESS = vf.createIRI(NAMESPACE, "Address");
 		PROF = vf.createIRI(NAMESPACE, "Prof");
 		STUDENT = vf.createIRI(NAMESPACE, "Student");
-		SCHOOL = vf.createIRI(NAMESPACE, "Course");
+		SCHOOL = vf.createIRI(NAMESPACE, "School");
 		PUBLICSERVICE = vf.createIRI(NAMESPACE, "PublicService");
-        BUILDING = vf.createIRI(NAMESPACE, "Building");          
-        CLASSROOM = vf.createIRI(NAMESPACE, "ClassRoom");         
-        SCHOOLFURNITURE = vf.createIRI(NAMESPACE, "SchoolFurniture");  
-        ROOM = vf.createIRI(NAMESPACE, "Room");
-        FURNITURE = vf.createIRI(NAMESPACE, "Furniture"); 
-		
+		BUILDING = vf.createIRI(NAMESPACE, "Building");
+		CLASSROOM = vf.createIRI(NAMESPACE, "ClassRoom");
+		SCHOOLFURNITURE = vf.createIRI(NAMESPACE, "SchoolFurniture");
+		ROOM = vf.createIRI(NAMESPACE, "Room");
+		FURNITURE = vf.createIRI(NAMESPACE, "Furniture");
+		COURSE = vf.createIRI(NAMESPACE, "Course");
+
 		// Object properties
-        LOCATED = vf.createIRI(NAMESPACE, "located");           
-        WORKSFOR = vf.createIRI(NAMESPACE, "worksFor");          
-        TEACHIN = vf.createIRI(NAMESPACE, "teachIn");           
-        INCHARGEOF = vf.createIRI(NAMESPACE, "inChargeOf");       
-        FOLLOWS = vf.createIRI(NAMESPACE, "follows");          
-        LEARNSIN = vf.createIRI(NAMESPACE, "learnsIn");        
-        HASCLASSROOM = vf.createIRI(NAMESPACE, "hasClassRoom");      
-        LIVES = vf.createIRI(NAMESPACE, "lives");           
-        HASSCHOOLFURNITURE = vf.createIRI(NAMESPACE, "hasSchoolfurniture");
-        HASFURNITURES = vf.createIRI(NAMESPACE, "hasFurnitures");     
-        CONSTITUED = vf.createIRI(NAMESPACE, "constitued"); 
-        TAKEPLACEIN = vf.createIRI(NAMESPACE, "takePalceIn"); 
-        HASCOURSE = vf.createIRI(NAMESPACE, "hasCourse"); 
-        
+		LOCATED = vf.createIRI(NAMESPACE, "located");
+		WORKSFOR = vf.createIRI(NAMESPACE, "worksFor");
+		TEACHIN = vf.createIRI(NAMESPACE, "teachIn");
+		INCHARGEOF = vf.createIRI(NAMESPACE, "inChargeOf");
+		FOLLOWS = vf.createIRI(NAMESPACE, "follows");
+		LEARNSIN = vf.createIRI(NAMESPACE, "learnsIn");
+		HASCLASSROOM = vf.createIRI(NAMESPACE, "hasClassRoom");
+		LIVES = vf.createIRI(NAMESPACE, "lives");
+		HASSCHOOLFURNITURE = vf.createIRI(NAMESPACE, "hasSchoolfurniture");
+		HASFURNITURES = vf.createIRI(NAMESPACE, "hasFurnitures");
+		CONSTITUED = vf.createIRI(NAMESPACE, "constitued");
+		TAKEPLACEIN = vf.createIRI(NAMESPACE, "takePalceIn");
+		HASCOURSE = vf.createIRI(NAMESPACE, "hasCourse");
+
 		// Data properties
 		CAP = vf.createIRI(NAMESPACE, "cap");
 		CITY = vf.createIRI(NAMESPACE, "city");
-		ROAD = vf.createIRI(NAMESPACE, "road");	
+		ROAD = vf.createIRI(NAMESPACE, "road");
 		SPECIALIZATION = vf.createIRI(NAMESPACE, "spacialization");
 		REGISRATIONDATE = vf.createIRI(NAMESPACE, "registrationDate");
-		COURSE = vf.createIRI(NAMESPACE, "Course");
 		LEVEL = vf.createIRI(NAMESPACE, "level");
 		LANGUAGE = vf.createIRI(NAMESPACE, "language");
 		NAME = vf.createIRI(NAMESPACE, "name");
 		SCHOOLTYPE = vf.createIRI(NAMESPACE, "schoolType");
-        OPENINGHOURS = vf.createIRI(NAMESPACE, "openingHours");      
-        SERVICETYPE = vf.createIRI(NAMESPACE, "serviceType");       
-        COLOR = vf.createIRI(NAMESPACE, "color");             
-        HEIGHT = vf.createIRI(NAMESPACE, "height");            
-        NUMBER = vf.createIRI(NAMESPACE, "number");            
-        CAPACITY = vf.createIRI(NAMESPACE, "capacity");        
-        STUDENTAGE = vf.createIRI(NAMESPACE, "studentAge");        
-        SUBJECT = vf.createIRI(NAMESPACE, "subject");           
-        SURFACE = vf.createIRI(NAMESPACE, "surface");           
-        VOLUME = vf.createIRI(NAMESPACE, "volume");           
-        MATERIAL = vf.createIRI(NAMESPACE, "material");          
-        PRICE = vf.createIRI(NAMESPACE, "price");     
-        
+		OPENINGHOURS = vf.createIRI(NAMESPACE, "openingHours");
+		SERVICETYPE = vf.createIRI(NAMESPACE, "serviceType");
+		COLOR = vf.createIRI(NAMESPACE, "color");
+		HEIGHT = vf.createIRI(NAMESPACE, "height");
+		NUMBER = vf.createIRI(NAMESPACE, "number");
+		CAPACITY = vf.createIRI(NAMESPACE, "capacity");
+		STUDENTAGE = vf.createIRI(NAMESPACE, "studentAge");
+		SUBJECT = vf.createIRI(NAMESPACE, "subject");
+		SURFACE = vf.createIRI(NAMESPACE, "surface");
+		VOLUME = vf.createIRI(NAMESPACE, "volume");
+		MATERIAL = vf.createIRI(NAMESPACE, "material");
+		PRICE = vf.createIRI(NAMESPACE, "price");
+
 	}
 }

@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.common.iteration.Iterations;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -16,6 +17,9 @@ import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryResult;
@@ -41,20 +45,14 @@ public class Ontology extends LRI{
 		ValueFactory f = rep.getValueFactory();
 
 		try {
-			iriMap = createIndividuals(conn, f);
-			buildOntology(conn);
-			
-			RepositoryResult<Statement> statements = conn.getStatements(null, null, null, true);
-			
-			Model model = Iterations.addAll(statements, new LinkedHashModel());
-			model.setNamespace("rdf", RDF.NAMESPACE);
-			model.setNamespace("rdfs", RDFS.NAMESPACE);
-			model.setNamespace("xsd", XMLSchema.NAMESPACE);
-			model.setNamespace("foaf", FOAF.NAMESPACE);
-			model.setNamespace("lri", LRI.NAMESPACE);
-			
-			Rio.write(model, System.out, RDFFormat.TURTLE);
-				
+			//iriMap = createIndividuals(conn, f);
+			//buildOntology(conn);
+			executeQueryGetFurniture(conn);
+			executeQueryGetAdvanceCourses(conn);
+			executeQueryGetLatinBadsedLanguageCourses(conn);
+			executeQueryGetNumberOfPeopleInSchool(conn);
+			executeQueryGetTeachedLanguages(conn);
+			executeQueryGetMaxStudentCapacity(conn);
 		}
 		catch (RDF4JException e) {
 			System.out.println("Exception : " + e.toString());
@@ -91,7 +89,8 @@ public class Ontology extends LRI{
 		conn.add(LRI.SCHOOLFURNITURE, RDFS.SUBCLASSOF, LRI.FURNITURE);
 		conn.add(LRI.HASSCHOOLFURNITURE, RDFS.SUBPROPERTYOF, LRI.HASFURNITURES);
 		conn.add(LRI.ROOM, LRI.HASFURNITURES, LRI.FURNITURE);
-		
+
+		System.out.println(iriMap.toString());
 		// RDF
 		conn.add(iriMap.get("julien"), LRI.INCHARGEOF, iriMap.get("frenchCourse"));
 		conn.add(iriMap.get("luca"), LRI.INCHARGEOF, iriMap.get("germanCourse"));
@@ -105,7 +104,9 @@ public class Ontology extends LRI{
 		conn.add(iriMap.get("luca"), LRI.LIVES, iriMap.get("lucaAddress"));
 		conn.add(iriMap.get("jerome"), LRI.LIVES, iriMap.get("jeromeAddress"));
 		conn.add(iriMap.get("julien"), LRI.LIVES, iriMap.get("julienAddress"));
-		conn.add(iriMap.get("julien"), LRI.LOCATED, iriMap.get("schooAddress"));
+		conn.add(iriMap.get("inlinguo"), LRI.LOCATED, iriMap.get("schooAddress"));
+		conn.add(iriMap.get("inlinguo"), LRI.HASCOURSE, iriMap.get("germanCourse"));
+		conn.add(iriMap.get("inlinguo"), LRI.HASCOURSE, iriMap.get("frenchCourse"));
 
 	}
 
@@ -119,7 +120,7 @@ public class Ontology extends LRI{
 		map.put("julien", createProf(conn, f, "Julien", "Julien Tscherig", "French"));
 		map.put("inlinguo", createSchool(conn, f, "Inlinguo", "Inlinguo", "Language School"));
 		map.put("germanCourse", createCourse(conn, f, "GermanCourse", "B2", "German"));
-		map.put("frenchCourse", createCourse(conn, f, "FrenchCourse", "C1", "FrenchS"));
+		map.put("frenchCourse", createCourse(conn, f, "FrenchCourse", "C1", "French"));
 		
 		map.put("room_132", createClassRoom(conn, f, "Room_132", 132, 32));
 		map.put("room_256", createClassRoom(conn, f, "Room_256", 256, 12));
@@ -129,11 +130,11 @@ public class Ontology extends LRI{
 		map.put("lucaAddress", createAddress(conn, f, "LucaAddress", 1422, "Grandson", "Rue des Jardins 22"));							
 		map.put("julienAddress", createAddress(conn, f, "JulienAddress", 1212, "Lorem", "Ipsum 45"));		
 		map.put("desireAddress", createAddress(conn, f, "DesireAddress", 3232, "Nunningen", "Lebernweg 5"));		
-		map.put("jeromeAddress", createAddress(conn, f, "JeromeAddress", 3206, "Gals", "Bern Strasse 1"));		
-		
+		map.put("jeromeAddress", createAddress(conn, f, "JeromeAddress", 3206, "Gals", "Bern Strasse 1"));	
+	
 		return map;
 	}
-
+	
 	// Address
 	static IRI createAddress(RepositoryConnection conn, ValueFactory f, String identifier, int cap, String city, String Road) {
 
@@ -156,7 +157,7 @@ public class Ontology extends LRI{
 		conn.add(iri, RDF.TYPE, LRI.PROF);
 		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
 		conn.add(iri, FOAF.NAME, f.createLiteral(name, XMLSchema.STRING));
-		conn.add(iri, LRI.SPECIALIZATION, f.createLiteral(name, XMLSchema.STRING));
+		conn.add(iri, LRI.SPECIALIZATION, f.createLiteral(specialization, XMLSchema.STRING));
 
 		return iri;
 	}
@@ -201,14 +202,14 @@ public class Ontology extends LRI{
 	}
 
 	// Public service
-	static IRI createPublicService(RepositoryConnection conn, ValueFactory f, String identifier, String name, String schoolType) {
+	static IRI createPublicService(RepositoryConnection conn, ValueFactory f, String identifier, String serviceType, String openingHours) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
 		conn.add(iri, RDF.TYPE, LRI.PUBLICSERVICE);
 		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-		conn.add(iri, LRI.SERVICETYPE, f.createLiteral(name, XMLSchema.STRING));
-		conn.add(iri, LRI.OPENINGHOURS, f.createLiteral(schoolType, XMLSchema.STRING));
+		conn.add(iri, LRI.SERVICETYPE, f.createLiteral(serviceType, XMLSchema.STRING));
+		conn.add(iri, LRI.OPENINGHOURS, f.createLiteral(openingHours, XMLSchema.STRING));
 
 		return iri;
 	}
@@ -220,8 +221,8 @@ public class Ontology extends LRI{
 
 		conn.add(iri, RDF.TYPE, LRI.CLASSROOM);
 		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-		conn.add(iri, LRI.CAPACITY, f.createLiteral(number));
-		conn.add(iri, LRI.NUMBER, f.createLiteral(capacity));
+		conn.add(iri, LRI.NUMBER, f.createLiteral(number));
+		conn.add(iri, LRI.CAPACITY, f.createLiteral(capacity));
 
 		return iri;
 	}
@@ -259,9 +260,9 @@ public class Ontology extends LRI{
 
 		conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
 		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
 		conn.add(iri, LRI.PRICE, f.createLiteral(price));
 		conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
-		conn.add(iri, LRI.SUBJECT, f.createLiteral(name, XMLSchema.STRING));
 
 		return iri;
 	}
@@ -273,9 +274,9 @@ public class Ontology extends LRI{
 
 		conn.add(iri, RDF.TYPE, LRI.SCHOOLFURNITURE);
 		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
+		conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
 		conn.add(iri, LRI.PRICE, f.createLiteral(price));
 		conn.add(iri, LRI.SUBJECT, f.createLiteral(subject, XMLSchema.STRING));
-		conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
 		conn.add(iri, LRI.STUDENTAGE, f.createLiteral(studentAge));
 		conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
 		
@@ -283,17 +284,156 @@ public class Ontology extends LRI{
 	}
 
 	// Furniture
-	static IRI createFurniture(RepositoryConnection conn, ValueFactory f, String identifier, String material, String name, float price) {
+	static IRI createFurniture(RepositoryConnection conn, ValueFactory f, String identifier,String name, float price, String material) {
 
 		IRI iri = f.createIRI(LRI.NAMESPACE, identifier);
 
 		conn.add(iri, RDF.TYPE, LRI.FURNITURE);
 		conn.add(iri, RDFS.LABEL, f.createLiteral(identifier, XMLSchema.STRING));
-		conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
 		conn.add(iri, LRI.NAME, f.createLiteral(name, XMLSchema.STRING));
 		conn.add(iri, LRI.PRICE, f.createLiteral(price));
+		conn.add(iri, LRI.MATERIAL, f.createLiteral(material, XMLSchema.STRING));
 
 		return iri;
 	}
+	
+	static void executeQueryGetFurniture(RepositoryConnection conn) {
+		
+		String query = 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+						"PREFIX lri: <http://lri.ch/> " +
+						"SELECT ?name ?price " +
+						"WHERE { " +
+								"?schoolFurniture rdf:type lri:SchoolFurniture ." +
+								"?schoolFurniture lri:name ?name ." +
+								"OPTIONAL {" +
+											"?schoolFurniture lri:price ?price ." +
+								"}" +
+						"}";	
 
+		System.out.println(query);
+		TupleQuery tupleQuery = conn.prepareTupleQuery(query);
+		TupleQueryResult results = tupleQuery.evaluate();
+		
+		for(BindingSet result : results) {
+			String name = result.getValue("name").toString();
+			String price = result.getValue("price").toString();
+			
+			System.out.println("| " + name + " | " + price + " |");
+		}
+	}
+	
+	static void executeQueryGetAdvanceCourses(RepositoryConnection conn) {
+		
+		String query = 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+						"PREFIX lri: <http://lri.ch/> " +
+						"SELECT ?course ?level " +
+						"WHERE { " +
+								"?course rdf:type lri:Course ." +
+								"?course lri:level ?level ." +
+								"FILTER (?level = \"C1\" || ?level = \"C2\")" +		
+						"}";	
+
+		System.out.println(query);
+		TupleQuery tupleQuery = conn.prepareTupleQuery(query);
+		TupleQueryResult results = tupleQuery.evaluate();
+		
+		for(BindingSet result : results) {
+			String course = result.getValue("course").toString();
+			String level = result.getValue("level").toString();
+			
+			System.out.println("| " + course + " | " + level + " |");
+		}
+	}
+	
+	static void executeQueryGetLatinBadsedLanguageCourses(RepositoryConnection conn) {
+		
+		String query = 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+						"PREFIX lri: <http://lri.ch/> " +
+						"SELECT ?course " +
+						"WHERE { {?course rdf:type lri:Course . ?course lri:language \"French\" }" +
+								"UNION" +
+								"{?course rdf:type lri:Course . ?course lri:language \"Italian\"}"+	
+								"UNION" +
+								"{?course rdf:type lri:Course . ?course lri:language \"Spanisch\"}"+	
+						"}";	
+
+		System.out.println(query);
+		TupleQuery tupleQuery = conn.prepareTupleQuery(query);
+		TupleQueryResult results = tupleQuery.evaluate();
+		
+		for(BindingSet result : results) {
+			String course = result.getValue("course").toString();
+			
+			System.out.println("| " + course + " |");
+		}
+	}
+	
+	static void executeQueryGetNumberOfPeopleInSchool(RepositoryConnection conn) {
+		
+		String query = 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+						"PREFIX lri: <http://lri.ch/> " +
+						"SELECT (count(?people) as ?numberOfPeople) " +
+						"WHERE { {?people rdf:type lri:Student} UNION {?people rdf:type lri:Prof}}";
+	
+
+		System.out.println(query);
+		TupleQuery tupleQuery = conn.prepareTupleQuery(query);
+		TupleQueryResult results = tupleQuery.evaluate();
+		
+		for(BindingSet result : results) {
+			String numberOfPeople = result.getValue("numberOfPeople").toString();
+			
+			System.out.println("| " + numberOfPeople + " |");
+		}
+	}
+	
+	static void executeQueryGetTeachedLanguages(RepositoryConnection conn) {
+		
+		String query = 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+						"PREFIX lri: <http://lri.ch/> " +
+						"SELECT DISTINCT ?language " +
+						"WHERE { " +
+								"?course rdf:type lri:Course ." +
+								"?course lri:language ?language ." +
+						"}";
+	
+
+		System.out.println(query);
+		TupleQuery tupleQuery = conn.prepareTupleQuery(query);
+		TupleQueryResult results = tupleQuery.evaluate();
+		
+		for(BindingSet result : results) {
+			String language = result.getValue("language").toString();
+			
+			System.out.println("| " + language + " |");
+		}
+	}
+	
+	static void executeQueryGetMaxStudentCapacity(RepositoryConnection conn) {
+		
+		String query = 	"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +
+						"PREFIX lri: <http://lri.ch/> " +
+						"SELECT (SUM(?capacity) as ?totalCapacity) " +
+						"WHERE { " +
+								"?classRoom rdf:type lri:ClassRoom ." +
+								"?classRoom lri:capacity ?capacity ." +
+						"}";
+	
+
+		System.out.println(query);
+		TupleQuery tupleQuery = conn.prepareTupleQuery(query);
+		TupleQueryResult results = tupleQuery.evaluate();
+		
+		for(BindingSet result : results) {
+			String totalCapacity = result.getValue("totalCapacity").toString();
+			
+			System.out.println("| " + totalCapacity + " |");
+		}
+	}
 }
